@@ -1,0 +1,36 @@
+Assume the imported table is named retail_clean.
+
+Total Revenue = SUM(retail_clean[Revenue])
+
+Total Orders = DISTINCTCOUNT(retail_clean[InvoiceNo])
+
+Total Customers = DISTINCTCOUNT(retail_clean[CustomerID])
+
+Units Sold = SUM(retail_clean[Quantity])
+
+Average Order Value = DIVIDE([Total Revenue], [Total Orders])
+
+Revenue per Customer = DIVIDE([Total Revenue], [Total Customers])
+
+Cancelled Orders =
+CALCULATE(
+    DISTINCTCOUNT(retail_clean[InvoiceNo]),
+    retail_clean[IsCancelled] = TRUE()
+)
+
+Revenue YoY % =
+VAR CurrentRevenue = [Total Revenue]
+VAR PreviousRevenue =
+    CALCULATE(
+        [Total Revenue],
+        DATEADD('Calendar'[Date], -1, YEAR)
+    )
+RETURN DIVIDE(CurrentRevenue - PreviousRevenue, PreviousRevenue)
+
+Recommended visuals:
+- KPI cards: Revenue, Orders, Customers, AOV
+- Line chart: Revenue by Month
+- Bar chart: Top 10 Products by Revenue
+- Map/bar chart: Revenue by Country
+- Donut/bar: RFM Segment
+- Slicers: Year, Month, Country, Segment
